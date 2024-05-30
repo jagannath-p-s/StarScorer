@@ -1,0 +1,41 @@
+-- Table to store all user information including admin, clients, and salesmen
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    role TEXT NOT NULL -- 'admin', 'client', 'salesman'
+);
+ALTER TABLE users
+ADD CONSTRAINT unique_username UNIQUE (username);
+
+
+-- Table to store client-specific information
+CREATE TABLE clients (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    review_link TEXT NOT NULL,
+    extraction_url TEXT NOT NULL,
+    logo_url TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Table to store review counts
+CREATE TABLE review_counts (
+    id SERIAL PRIMARY KEY,
+    client_id INTEGER NOT NULL,
+    count INTEGER NULL,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+);
+
+-- Table to store salesmen information
+CREATE TABLE salesmen (
+    id SERIAL PRIMARY KEY,
+    client_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    unique_review_page_link TEXT NOT NULL,
+    points INTEGER NULL DEFAULT 0,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+);
+
+

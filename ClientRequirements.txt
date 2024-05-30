@@ -1,0 +1,97 @@
+I want to create a python flask application ,
+
+Application Logic
+Admin Actions:
+
+Login:
+Admins can log in to the application.
+Add Clients:
+Admins can add clients along with their review and extraction URLs.
+Manage Users:
+Admins can add or remove clients and salesmen.
+Client Actions:
+
+Login:
+Clients can log in to the application.
+View and Manage Salesmen:
+Clients can view and manage their associated salesmen using a unique but customizable customerid.
+View Review Counts and Associated Data:
+Clients can see the number of reviews and other relevant data.
+Salesman Actions:
+
+View Review Page:
+Salesmen are provided with their unique review page link by the admin, formatted as www.example.com/app/clientid/customerid.
+
+Python Logic
+Fetching Review Counts:
+
+Extract the review count from the client's extraction URL using BeautifulSoup.
+
+Update the review count in the review_counts table if there is a new review.
+
+Updating Salesman Points:
+
+Increase the salesman's points when a new review is detected.
+Implement measures to prevent review manipulation techniques.
+Handle multiple people adding reviews simultaneously.
+Create logic to handle occasional but deletion of reviews by customers.
+
+
+.........................................................................
+
+-- Table to store all user information including admin, clients, and salesmen
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    role TEXT NOT NULL -- 'admin', 'client', 'salesman'
+);
+
+-- Table to store client-specific information
+CREATE TABLE clients (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    review_link TEXT NOT NULL,
+    extraction_url TEXT NOT NULL,
+    logo_url TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Table to store review counts
+CREATE TABLE review_counts (
+    id SERIAL PRIMARY KEY,
+    client_id INTEGER NOT NULL,
+    count INTEGER NULL,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+);
+
+-- Table to store salesmen information
+CREATE TABLE salesmen (
+    id SERIAL PRIMARY KEY,
+    client_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    customerid TEXT NOT NULL,
+    unique_review_page_link TEXT NOT NULL,
+    points INTEGER NULL DEFAULT 0,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+);
+ 
+ Is the database code , Im using supabase as the database 
+
+my sample project url and api key is 
+
+SUPABASE_URL = "https://koakfvpwwskmazwvljio.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvYWtmdnB3d3NrbWF6d3ZsamlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU4NDM2NDYsImV4cCI6MjAzMTQxOTY0Nn0.Ix64dISA1pwAKdIw39gr5u7vZOAxIMmk1Jh78vADzac"
+
+
+my sample review link value and EXTRACTION_URL value is 
+
+REVIEW_LINK = "https://search.google.com/local/writereview?placeid=ChIJc-qHK0eVpzsRBS2z_jCQExs"
+EXTRACTION_URL = "https://www.google.com/search?q=cctv+kunnamkulam&sca_esv=a6c39f4d03c5324c&sxsrf=ADLYWIL3rBRAhNnO7Uss8Fgyqbd-ZM9lqA%3A1716466612697&ei=tDNPZreYKv6P4-EPhLeY4A0&ved=0ahUKEwi3wt-14KOGAxX-xzgGHYQbBtwQ4dUDCBE&uact=5&oq=cctv+kunnamkulam&gs_lp=Egxnd3Mtd2l6LXNlcnAiEGNjdHYga3VubmFta3VsYW0yBBAjGCcyBBAjGCcyChAAGIAEGEMYigUyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYywEyCBAAGIAEGMsBSIslULQIWK8icAF4AZABAJgBqgGgAdcPqgEEMC4xNrgBA8gBAPgBAZgCEaACwxCoAhTCAgcQIxgnGOoCwgIWEC4YAxi0AhjlAhjqAhiMAxiPAdgBAcICFhAAGAMYtAIY5QIY6gIYjAMYjwHYAQHCAgoQIxiABBgnGIoFwgILEAAYgAQYkQIYigXCAhEQLhiABBiRAhixAxiDARiKBcICChAuGIAEGEMYigXCAggQABiABBixA8ICCxAAGIAEGLEDGIMBwgIREC4YgAQYsQMY0QMYgwEYxwHCAg4QABiABBiRAhixAxiKBcICDRAAGIAEGLEDGEMYigWYAxPiAwUSATEgQLoGBggBEAEYC5IHBDEuMTagB4yLAQ&sclient=gws-wiz-serp"
+
+, 
+
+...........................................................................
+first give the html and python code for login.py and dasboards simple external customers ,  
+
